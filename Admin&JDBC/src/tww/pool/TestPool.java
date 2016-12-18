@@ -1,9 +1,9 @@
-package com.tww.pool;
+package tww.pool;
 
 import java.sql.*;
 /**
  * 测试连接池的效率
- * @author lenovo
+ * @author Tanvi
  *
  */
 public class TestPool {

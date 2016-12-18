@@ -1,4 +1,4 @@
-package com.tww.pool;
+package tww.pool;
 
 import java.sql.*;
 import java.util.*;

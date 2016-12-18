@@ -1,4 +1,4 @@
-package com.tww.pool;
+package tww.pool;
 
 import java.io.IOException;
 import java.sql.*;
@@ -33,9 +33,6 @@ public class DBManager {
 		conf.setUrl(pros.getProperty("url"));
 		conf.setUser(pros.getProperty("user"));
 		conf.setPwd(pros.getProperty("pwd"));
-//		conf.setUsingDB(pros.getProperty("usingDB"));
-//		conf.setSrcPath(pros.getProperty("srcPath"));
-//		conf.setPoPackage(pros.getProperty("poPackage"));
 		conf.setPoolMaxSize(Integer.parseInt(pros.getProperty("poolMaxSize")));
 		conf.setPoolMinSize(Integer.parseInt(pros.getProperty("poolMinSize")));
 	}

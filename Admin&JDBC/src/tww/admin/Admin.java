@@ -5,9 +5,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JToggleButton;
 
 public class Admin {
 
@@ -42,10 +45,11 @@ public class Admin {
 	private void initialize() {
 		welcomeFrame = new JFrame();
 		welcomeFrame.setTitle("\u5168\u4E16\u754C\u6700\u597D\u7684\u533B\u9662");
-		welcomeFrame.setBounds(100, 100, 450, 350);
+		welcomeFrame.setBounds(500, 200, 450, 350);
 		welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		welcomeFrame.getContentPane().setLayout(null);
 		
+		ButtonGroup btnGroup=new ButtonGroup();
 		JLabel welcomeLabel = new JLabel("\u6B22\u8FCE\u6765\u5230\u7BA1\u7406\u7AEF");
 		welcomeLabel.setFont(new Font("微软雅黑", Font.PLAIN, 16));
 		welcomeLabel.setBounds(137, 10, 126, 33);
@@ -60,24 +64,27 @@ public class Admin {
 		addButton.setSelected(true);
 		addButton.setBounds(161, 110, 121, 23);
 		welcomeFrame.getContentPane().add(addButton);
+		btnGroup.add(addButton);
 		
 		JRadioButton deleteButton = new JRadioButton("\u5220\u9664\u4FE1\u606F");
 		deleteButton.setBounds(161, 151, 121, 23);
 		welcomeFrame.getContentPane().add(deleteButton);
+		btnGroup.add(deleteButton);
 		
 		JRadioButton alterButton = new JRadioButton("\u4FEE\u6539\u4FE1\u606F");
 		alterButton.setBounds(161, 193, 121, 23);
 		welcomeFrame.getContentPane().add(alterButton);
+		btnGroup.add(alterButton);
 		
 		JButton confirmButton = new JButton("\u786E\u5B9A");
 		confirmButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(addButton.isSelected()){
-					AddMesg.addMesg();
+					AddMesg.addMesg();							//添加信息
 				}else if(deleteButton.isSelected()){
-					DeleteMesg.deleteMesg();
+					DeleteMesg.deleteMesg();					//删除信息
 				}else if(alterButton.isSelected()){
-					AlterMesg.alterMesg();
+					AlterMesg.alterMesg();						//修改信息
 				}
 				
 			}
@@ -89,6 +96,7 @@ public class Admin {
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				welcomeFrame.dispose();
+				System.exit(0);
 			}
 		});
 		cancelButton.setBounds(238, 241, 70, 30);

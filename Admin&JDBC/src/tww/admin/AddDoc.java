@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -12,9 +14,7 @@ import tww.pool.DBManager;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.awt.event.ActionEvent;
 
 public class AddDoc {
@@ -54,13 +54,13 @@ public class AddDoc {
 	private void initialize() {
 		docFrame = new JFrame();
 		docFrame.setTitle("\u5168\u4E16\u754C\u6700\u597D\u7684\u533B\u9662");
-		docFrame.setBounds(100, 100, 450, 350);
+		docFrame.setBounds(500, 200, 450, 350);
 		docFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		docFrame.getContentPane().setLayout(null);
 		
 		JLabel label = new JLabel("\u8BF7\u8F93\u5165\u9700\u6DFB\u52A0\u7684\u533B\u751F\u4FE1\u606F");
 		label.setFont(new Font("微软雅黑", Font.PLAIN, 14));
-		label.setBounds(139, 25, 169, 15);
+		label.setBounds(140, 25, 170, 15);
 		docFrame.getContentPane().add(label);
 		
 		JLabel label_1 = new JLabel("\u5DE5\u53F7\uFF1A");
@@ -112,18 +112,24 @@ public class AddDoc {
 				String dept=deptText.getText();
 				int patnum=Integer.parseInt(patnumText.getText());
 				Connection conn=null;
-				Statement ps=null;
-				
+				PreparedStatement ps=null;
+				String sql="insert into Doctor values(?,?,?,?)";
 				try {
 					conn=DBManager.getConnect();
-					ps=conn.createStatement();
-					String sql="insert into Doctor values("+id+",'"+name+"','"+dept+"',"+patnum+");";
-					try {
-						ps.executeUpdate(sql);
-						
-					} catch (SQLException e1) {
-						e1.printStackTrace();
+					ps=conn.prepareStatement(sql);
+					ps.setInt(1,id);
+					ps.setString(2, name);
+					ps.setString(3, dept);
+					ps.setInt(4, patnum);
+					int i=ps.executeUpdate();
+					if(i==0){
+						JOptionPane.showMessageDialog(null, "添加医生信息失败！请检查您的输入信息是否正确。");
+					}else{
+						JOptionPane.showMessageDialog(null, "已成功添加医生信息！");
 					}
+					
+					docFrame.setVisible(false);
+					
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}finally{

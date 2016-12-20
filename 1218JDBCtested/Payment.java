@@ -22,7 +22,7 @@ public class Payment {
 	private JTextArea project;
 	float total=0;
 	
-	Connection conn=JDBCUtil.getConnect();
+	Connection conn=DBManager.getConnect();
 	Statement st=null;
 	ResultSet rs=null;
 
@@ -68,7 +68,7 @@ public class Payment {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				if(!phone.getText().matches("\\d+"))
-					JOptionPane.showMessageDialog(null, "ÇëÊäÈëÕıÈ·µÄµç»°ºÅÂë£¡","ÊäÈë´íÎó",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "è¯·è¾“å…¥æ­£ç¡®çš„ç”µè¯å·ç ï¼","è¾“å…¥é”™è¯¯",JOptionPane.ERROR_MESSAGE);
 				else{
 					String sql,p=phone.getText().toString();
 					try {
@@ -84,17 +84,17 @@ public class Payment {
 						rs=st.executeQuery(sql);
 						if(rs.next()){
 							do{
-								project.append("\n\nÒ©Æ·/ÏîÄ¿£º"+rs.getString("Pat_feename")+"     ÊıÁ¿£º"+Integer.toString(rs.getInt("Pro_num"))+"     µ¥¼Û£º"+Float.toString(rs.getFloat("Pat_proprice"))+"     Ğ¡¼Æ£º"+Float.toString(rs.getFloat("account")));    
+								project.append("\n\nè¯å“/é¡¹ç›®ï¼š"+rs.getString("Pat_feename")+"     æ•°é‡ï¼š"+Integer.toString(rs.getInt("Pro_num"))+"     å•ä»·ï¼š"+Float.toString(rs.getFloat("Pat_proprice"))+"     å°è®¡ï¼š"+Float.toString(rs.getFloat("account")));    
 								total+=rs.getFloat("account");
 							}while(rs.next());
 						}
-						else JOptionPane.showMessageDialog(null, "ÎŞÊÕ·ÑÏî»òÎŞ¸Ã²¡ÈË¼ÇÂ¼£¡","ÎŞÊÕ·ÑÏî",JOptionPane.INFORMATION_MESSAGE);
+						else JOptionPane.showMessageDialog(null, "æ— æ”¶è´¹é¡¹æˆ–æ— è¯¥ç—…äººè®°å½•ï¼","æ— æ”¶è´¹é¡¹",JOptionPane.INFORMATION_MESSAGE);
 						
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					project.append("\n\n×Ü¼Æ:"+Float.toString(total));
+					project.append("\n\næ€»è®¡:"+Float.toString(total));
 				}
 			}	
 		});
@@ -118,9 +118,9 @@ public class Payment {
 					}
 					project.setText("");
 					phone.setText("");
-					JOptionPane.showMessageDialog(null, "Íê³É½É·Ñ£¡","½É·Ñ³É¹¦",JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "å®Œæˆç¼´è´¹ï¼","ç¼´è´¹æˆåŠŸ",JOptionPane.INFORMATION_MESSAGE);
 				}
-				else JOptionPane.showMessageDialog(null, "·ÑÓÃÎª0£¬²»Ğè½É·Ñ£¡","ÎŞĞè½É·Ñ",JOptionPane.INFORMATION_MESSAGE);
+				else JOptionPane.showMessageDialog(null, "è´¹ç”¨ä¸º0ï¼Œä¸éœ€ç¼´è´¹ï¼","æ— éœ€ç¼´è´¹",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
@@ -128,7 +128,7 @@ public class Payment {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JDBCUtil.close(rs, st, conn);
+				DBManager.close(rs, st, conn);
 				fr.dispose();
 			}	
 		});

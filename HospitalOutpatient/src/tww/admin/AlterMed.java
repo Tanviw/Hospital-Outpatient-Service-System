@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class AlterMed {
 
@@ -56,9 +57,9 @@ public class AlterMed {
 		alterMedFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		alterMedFrame.getContentPane().setLayout(null);
 		
-		JLabel label = new JLabel("\u8BF7\u8F93\u5165\u9700\u8981\u4FEE\u6539\u7684\u836F\u54C1\u540D\u79F0\uFF1A");
+		JLabel label = new JLabel("\u8BF7\u8F93\u5165\u9700\u8981\u4FEE\u6539\u7684\u836F\u54C1\u540D\u79F0\u6216\u7B80\u7801\uFF1A");
 		label.setFont(new Font("ËÎÌו", Font.PLAIN, 12));
-		label.setBounds(122, 59, 189, 22);
+		label.setBounds(111, 63, 218, 22);
 		alterMedFrame.getContentPane().add(label);
 		
 		textField = new JTextField();
@@ -73,11 +74,12 @@ public class AlterMed {
 				Connection conn=null;
 				PreparedStatement ps=null;
 				ResultSet rs=null;
-				String sql="select * from Medicine where Med_name=?";
+				String sql="select * from Medicine where Med_name=? or cast(Med_bfcode as varchar(50))=?;";
 				try {
 					conn=DBManager.getConnect();
 					ps=conn.prepareStatement(sql);
 					ps.setString(1,medName);
+					ps.setString(2,medName);
 					rs=ps.executeQuery();
 					if(rs.next()){
 						UpdateMed.updateMed(rs.getString(1),rs.getFloat(2),rs.getString(3),rs.getInt(4));
@@ -106,5 +108,4 @@ public class AlterMed {
 		button_1.setBounds(241, 208, 70, 30);
 		alterMedFrame.getContentPane().add(button_1);
 	}
-
 }

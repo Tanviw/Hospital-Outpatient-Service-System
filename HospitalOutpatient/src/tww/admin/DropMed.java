@@ -98,12 +98,12 @@ public class DropMed {
 			public void actionPerformed(ActionEvent e) {
 				Connection conn=null;
 				PreparedStatement ps=null;
-				String sql="delete from Medicine where Med_name=?;";
+				String sql="delete from Medicine where Med_name=? or cast(Med_bfcode as varchar(50))=?;";
 				try {
 					conn=DBManager.getConnect();
 					ps=conn.prepareStatement(sql);
 					ps.setString(1,name);
-		
+					ps.setString(2,name);
 					int i=ps.executeUpdate();
 					if(i==0){
 						JOptionPane.showMessageDialog(null, "删除药品失败！请检查您的输入信息是否正确。");

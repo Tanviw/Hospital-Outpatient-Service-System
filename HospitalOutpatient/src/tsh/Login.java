@@ -4,7 +4,10 @@ import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 
+import cn.edu.usst.yff.Director;
+import tww.admin.Admin;
 import tww.pool.DBManager;
+import wyqoctor.DoctorVisit;
 
 public class Login {
 	private static JTextField account;
@@ -98,15 +101,15 @@ public class Login {
 					            DBManager.close(rs, st, conn);
 					            frm.dispose();
 					            break;
-					    /*case 3: Doctor.main(null);
-					              DBManager.close(rs.st.conn);
+					    case 3: DoctorVisit.main(null);
+					              DBManager.close(rs,st,conn);
 			                   break; 
 					    case 4: Admin.main(null);
-					           DBManager.close(rs.st.conn);						
+					           DBManager.close(rs,st,conn);						
                                              break;
 					    case 5: Director.main(null);
-					    DBManager.close(rs.st.conn);					
-                                                  break;*/
+					    DBManager.close(rs,st,conn);					
+                                                  break;
 					    default:break;
 					}
 				}

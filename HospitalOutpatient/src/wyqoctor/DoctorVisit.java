@@ -1,5 +1,4 @@
-package doctor;
-
+package wyqoctor;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +9,13 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
+import tww.pool.*;
+
 public class DoctorVisit extends  JFrame  implements ActionListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	static DoctorVisit doctor=new DoctorVisit();
 	static JButton button1,button2,button3,button4;
 	static JTextField input,input1,input2,input21;
@@ -119,15 +124,16 @@ public void actionPerformed(ActionEvent e) {
 public void denglu(){//得到该医生的病人排队表里号最小的病人并显示信息
 	
 	Connection conn=null;
-	Preparedstatement ps=null;
+	PreparedStatement ps=null;
 	ResultSet rs=null;
 	String s=input.getText();
 	int d=Integer.parseInt(s);
 	did=d;
 	try {
 		conn=DBManager.getConnect();
-		ps=conn.Preparedstatement();
+		//ps=conn.PreparedStatement();
 		String sql="select min(Pat_num) from Patien_queue where Doc_id=?";
+		ps=conn.prepareStatement(sql);
 		ps.setInt(1,did);
 		try {
 			rs=ps.executeQuery(sql);
@@ -172,8 +178,9 @@ public void chayao(){
 	ResultSet rs=null;
 	try {
 		conn=DBManager.getConnect();
-		ps=conn.Preparedstatement();
+		//ps=conn.PreparedStatement();
 		String sql="select *from medicine where Med_bfcode=?";
+		ps=conn.prepareStatement(sql);
 		ps.setString(1,s);
 		try {
 			rs=ps.executeQuery(sql);
@@ -225,12 +232,13 @@ public void chayao(){
 public void xiangmu(){
 	String s=input21.getText();//检查项目名
 	Connection conn=null;
-	Preparedstatement ps=null;
+	PreparedStatement ps=null;
 	ResultSet rs=null;
 	try {
 		conn=DBManager.getConnect();
-		ps=conn.Preparedstatement();
 		String sql="select *from Charge_list where Pro_bfcode=?";
+		ps=conn.prepareStatement(sql);
+		//String sql="select *from Charge_list where Pro_bfcode=?";
 		ps.setString(1,s);
 		
 		try {

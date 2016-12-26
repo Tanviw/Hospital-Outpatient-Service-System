@@ -4,9 +4,11 @@ import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 
+import tww.pool.DBManager;
+
 public class Login {
 	private static JTextField account;
-	private static String [] opt={"","è¯æˆ¿","æŒ‚å·æ”¶è´¹","åŒ»ç”Ÿ","ç®¡ç†å‘˜","é™¢é•¿"};
+	private static String [] opt={"","Ò©·¿","¹ÒºÅÊÕ·Ñ","Ò½Éú","¹ÜÀíÔ±","Ôº³¤"};
 	private static JComboBox<String> dept;
 	
 	private static Connection conn=DBManager.getConnect();
@@ -77,7 +79,7 @@ public class Login {
 		char [] p=pwd.getPassword();
 		String pass=new String(p);
 		if(account.getText().length()==0||pass.equals("")||dept.getSelectedItem().equals(""))
-			JOptionPane.showMessageDialog(null, "è¯·å°†ç™»å½•ä¿¡æ¯å¡«å†™å®Œæ•´ï¼","ä¿¡æ¯é—æ¼",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Çë½«µÇÂ¼ĞÅÏ¢ÌîĞ´ÍêÕû£¡","ĞÅÏ¢ÒÅÂ©",JOptionPane.ERROR_MESSAGE);
 		else{
 			String sql;
 			int index=dept.getSelectedIndex();
@@ -86,7 +88,7 @@ public class Login {
 			try {
 				st=conn.createStatement();
 				rs=st.executeQuery(sql);
-				if(rs.next()){  //åŒ¹é…ï¼Œç™»å½•æˆåŠŸ
+				if(rs.next()){  
 					switch(index){
 					    case 1: Pharmacy.main(null);
 					            DBManager.close(rs, st, conn);
@@ -108,8 +110,8 @@ public class Login {
 					    default:break;
 					}
 				}
-				else{  //ä¸åŒ¹é…ï¼Œç™»å½•å¤±è´¥
-					JOptionPane.showMessageDialog(null, "è´¦å·ã€å¯†ç åŠéƒ¨é—¨ä¸åŒ¹é…ï¼Œè¯·æ£€æŸ¥æ‚¨çš„è¾“å…¥ï¼","ç™»å½•å¤±è´¥",JOptionPane.ERROR_MESSAGE);
+				else{  
+					JOptionPane.showMessageDialog(null, "ÕËºÅ¡¢ÃÜÂë¼°²¿ÃÅ²»Æ¥Åä£¬Çë¼ì²éÄúµÄÊäÈë£¡","µÇÂ¼Ê§°Ü",JOptionPane.ERROR_MESSAGE);
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -123,3 +125,13 @@ public class Login {
 		login_GUI();
 	}
 }
+
+
+
+
+
+
+
+
+
+

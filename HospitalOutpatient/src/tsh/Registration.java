@@ -1,6 +1,9 @@
 package tsh;
 
 import javax.swing.*;
+
+import tww.pool.DBManager;
+
 import java.awt.event.*;
 import java.sql.*;
 import java.text.ParseException;

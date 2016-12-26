@@ -1,6 +1,5 @@
-package doctor;
+package wyqoctor;
 
-import java.awt.*;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +10,7 @@ import java.sql.ResultSet;
 import javax.swing.*;
 import javax.swing.JTextArea;
 
+import tww.pool.*;
 
 
 public class Patient extends  JFrame  implements ActionListener {
@@ -91,8 +91,9 @@ public class Patient extends  JFrame  implements ActionListener {
 		String s6=t6.getText();
 		try{
 			conn=DBManager.getConnect();
-			ps=conn.Preparedstatement();
+			//ps=conn.prepareStatement();
 			String sql="insert into Pat_order values(?,?,d,?,?,?)";
+			ps=conn.prepareStatement(sql);
 			ps.setString(1, s1);
 			ps.setString(2, s2);
 			ps.setString(3, s4);

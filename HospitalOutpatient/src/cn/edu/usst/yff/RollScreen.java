@@ -1,8 +1,11 @@
-package cn.edu.usst.yff;
+package yff;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
+
+import tww.pool.DBManager;
 
 public class RollScreen extends  JFrame  implements ActionListener  {
 	static JButton b1,b2;
@@ -13,7 +16,7 @@ public class RollScreen extends  JFrame  implements ActionListener  {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		JFrame frm=new JFrame();
-		frm.setTitle("使用流布局管理器");
+		frm.setTitle("全世界最好的医院");
 		FlowLayout flowLayout=new FlowLayout(); 
 		frm.setLayout(flowLayout);//设置使用流布局管理器		
 		//创建组件并添加到容器中					    
@@ -61,57 +64,36 @@ public class RollScreen extends  JFrame  implements ActionListener  {
 		}		
 	}
 public static void rollscreen(){
-	Connection con=null;
-	//加载数据库驱动程序
-	try {
-		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-    //建立数据库连接
-	try {
-		con=DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=HospitalOutpatient","sa","M03039946");
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}	       
-	Statement st=null;
-	  //创建语句对象			 
-	try {
-		 st=con.createStatement();
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}	
-	String sql="select Pat_num,Doc_dept from Doctor join Patient_queue on Doctor.Doc_id=Patient_queue.Doc_id "
-               +"where cast(Doc_dept as varchar(8000))='"+(String)box.getSelectedItem()+"'"
-                +"ORDER BY Pat_num ASC";               
+	Connection conn=null;
+	Statement ps=null;
 	ResultSet rs=null;
 	try {
-		rs=st.executeQuery(sql);
-	    } catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	try {
-		while(rs.next()){
-		output.append("  "+rs.getInt("Pat_num"));
-		output.append("\n");
+		conn=DBManager.getConnect();
+		ps=conn.createStatement();
+		String sql="select Pat_num,Doc_dept from Doctor join Patient_queue on Doctor.Doc_id=Patient_queue.Doc_id "
+	               +"where cast(Doc_dept as varchar(8000))='"+(String)box.getSelectedItem()+"'"
+	                +"ORDER BY Pat_num ASC";   
+		try {
+			rs=ps.executeQuery(sql);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-	} catch (SQLException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}	 		
-	try {
-		rs.close();
-		st.close();
-		con.close();
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}			
-  }
-  	
-}
+		try {
+			while(rs.next()){				
+					output.append("  "+rs.getInt("Pat_num"));
+					output.append("\n");				
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 
+	} catch (Exception e) {
+		e.printStackTrace();
+	}finally{
+		DBManager.close(rs,ps,conn);
+	}
+ }
+}
+	
+	

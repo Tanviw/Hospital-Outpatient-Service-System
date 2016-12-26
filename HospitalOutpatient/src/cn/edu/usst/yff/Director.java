@@ -1,6 +1,8 @@
-package cn.edu.usst.yff;
+package yff;
+
 import java.sql.*;
 import javax.swing.*;
+import tww.pool.DBManager;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -94,36 +96,17 @@ public class Director extends  JFrame  implements ActionListener{
 	}
     //查询药品库存量
     public void Search_Med(){
-    	
-			Connection con=null;
-			//加载数据库驱动程序
-			try {
-				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		    //建立数据库连接
-			try {
-				con=DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=HospitalOutpatient","XXX","XXX");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	       
-			Statement st=null;
-			  //创建语句对象			 
-			try {
-				 st=con.createStatement();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
+    	Connection conn=null;
+		Statement ps=null;
+		ResultSet rs=null;
+		try {
+			conn=DBManager.getConnect();
+			ps=conn.createStatement();
 			String sql="select * from medicine";
-			ResultSet rs=null;
 			try {
-				rs=st.executeQuery(sql);
+				rs=ps.executeQuery(sql);
+				
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try {
@@ -134,54 +117,33 @@ public class Director extends  JFrame  implements ActionListener{
 				output.append("\n");
 				}
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}				
-			try {
-				rs.close();
-				st.close();
-				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-		}		
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			DBManager.close(rs,ps,conn);
+		}
+	}					   																
 	//查询科室的挂号量和总金额
 	public void Search_Deptcount(){
 		
-		Connection con=null;
-			//加载数据库驱动程序
-			try {
-				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		    //建立数据库连接
-			try {
-				con=DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=HospitalOutpatient","XXX","XXX");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	        
-			Statement st=null;
-			  //创建语句对象			 
-			try {
-				 st=con.createStatement();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
+		Connection conn=null;
+		Statement ps=null;
+		ResultSet rs=null;
+		try {
+			conn=DBManager.getConnect();
+			ps=conn.createStatement();
 			//查询检索数据；select语句通常用executeQuery,会返回一个ResultSet结果集对象（这是一个二维表）
 			String sql="select Doc_dept ,SUM(Doc_patnum) as Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num "
 					   +" from  Doctor join Pat_charge on Doc_id=Pat_docid "
 					   +" where Pat_charged=1 "
 					   +" GROUP BY Doc_dept ";
-			ResultSet rs=null;
 			try {
-				rs=st.executeQuery(sql);
+				rs=ps.executeQuery(sql);
+				
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try {
@@ -192,166 +154,104 @@ public class Director extends  JFrame  implements ActionListener{
 					output.append("\n");
 				}
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}				
-			try {
-				rs.close();
-				st.close();
-				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}					
-		}		
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			DBManager.close(rs,ps,conn);
+		}
+	}																		
 //查询每个医生的就诊数量和金额
  public void Search_Doc(){
-	 Connection con=null;
-		//加载数据库驱动程序
+	 Connection conn=null;
+		Statement ps=null;
+		ResultSet rs=null;
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    //建立数据库连接
-		try {
-			con=DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=HospitalOutpatient","XXX","XXX");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}    
-		Statement st=null;
-		  //创建语句对象			 
-		try {
-			 st=con.createStatement();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		//查询检索数据；select语句通常用executeQuery,会返回一个ResultSet结果集对象（这是一个二维表）			
+			conn=DBManager.getConnect();
+			ps=conn.createStatement();
+			//查询检索数据；select语句通常用executeQuery,会返回一个ResultSet结果集对象（这是一个二维表）			
 		String sql="select Doc_id,SUM(Doc_patnum) as Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num "
                   +" from Doctor join Pat_charge on Doc_id=Pat_docid "
                   +" where Pat_charged=1 "
                   +" GROUP BY Doc_id ";
-		ResultSet rs=null;
-		try {
-			rs=st.executeQuery(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-				try {
+			try {
+				rs=ps.executeQuery(sql);
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
 				while(rs.next()){
 					output.append(" 医生id："+rs.getInt("Doc_id"));	
 					output.append(" 挂号量："+rs.getInt("Doc_patnum"));	
 					output.append(" 总金额："+rs.getDouble("Pro_num"));
 					output.append("\n");
 				}
-			  } catch (SQLException e1) {
-				// TODO Auto-generated catch block
+			} catch (SQLException e1) {
 				e1.printStackTrace();
-			}				
-		try {			
-			rs.close();
-			st.close();
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			}
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}				
-    }  
- public void search_promed(){
-		Connection con=null;
-		//加载数据库驱动程序
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}finally{
+			DBManager.close(rs,ps,conn);
 		}
-	    //建立数据库连接
-		try {
-			con=DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=HospitalOutpatient","XXX","XXX");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	       
-		Statement st=null;
-		  //创建语句对象			 
-		try {
-			 st=con.createStatement();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		String sql="select * from medicine where Med_name='"+input.getText()+"'";
+	}								
+ public void search_promed(){
+		
+	 Connection conn=null;
+		Statement ps=null;
 		ResultSet rs=null;
 		try {
-			rs=st.executeQuery(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			while(rs.next()){			
+			conn=DBManager.getConnect();
+			ps=conn.createStatement();
+			String sql="select * from medicine where Med_name='"+input.getText()+"'";
+			try {
+				rs=ps.executeQuery(sql);
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				while(rs.next()){			
 			output.append("    药品名称："+rs.getString("Med_name"));
 			output.append("\n");
 			output.append("    药品简码："+rs.getString("Med_bfcode"));	
 			output.append("\n");
 			output.append("    库存量："+rs.getInt("Med_count"));	
-			output.append("\n");
+			output.append("\n");		
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
 			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}				
-		try {
-			rs.close();
-			st.close();
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}			
-	}	
+		}finally{
+			DBManager.close(rs,ps,conn);
+		}
+	}							
 	//医生按id查询
 	public void search_prodoc(){
-		Connection con=null;
-		//加载数据库驱动程序
+		Connection conn=null;
+		Statement ps=null;
+		ResultSet rs=null;
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    //建立数据库连接
-		try {
-			con=DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=HospitalOutpatient","XXX","XXX");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	       
-		Statement st=null;
-		  //创建语句对象			 
-		try {
-			 st=con.createStatement();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		String sql="select Doc_id,SUM(Doc_patnum ) as Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num " 
+			conn=DBManager.getConnect();
+			ps=conn.createStatement();
+			String sql="select Doc_id,SUM(Doc_patnum ) as Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num " 
          +" from Pat_charge join Doctor on Doc_id=Pat_docid "
          +" where  Pat_charged=1 and Doc_id="+input.getText()+" "
          +" Group By Doc_patnum,Doc_id";
-		ResultSet rs=null;
-		try {
-			rs=st.executeQuery(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-				try {
+			try {
+				rs=ps.executeQuery(sql);
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
 				while(rs.next()){						
 					output.append(" 医生id："+rs.getInt("Doc_id"));
 					output.append("\n");
@@ -360,58 +260,37 @@ public class Director extends  JFrame  implements ActionListener{
 					output.append(" 总金额："+rs.getDouble("Pro_num"));
 					output.append("\n");
 				}
-			  } catch (SQLException e1) {
-				// TODO Auto-generated catch block
+			} catch (SQLException e1) {
 				e1.printStackTrace();
-			}				
-		try {			
-			rs.close();
-			st.close();
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			}
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}				
-	}
-	
+		}finally{
+			DBManager.close(rs,ps,conn);
+		}
+	}												
 public void search_prodeptcount(){
 		
-		Connection con=null;
-			//加载数据库驱动程序
-			try {
-				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		    //建立数据库连接
-			try {
-				con=DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=HospitalOutpatient","XXX","XXX");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	        
-			Statement st=null;
-			  //创建语句对象			 
-			try {
-				 st=con.createStatement();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-			//查询检索数据；select语句通常用executeQuery,会返回一个ResultSet结果集对象（这是一个二维表）
+	Connection conn=null;
+	Statement ps=null;
+	ResultSet rs=null;
+	try {
+		conn=DBManager.getConnect();
+		ps=conn.createStatement();
+		//查询检索数据；select语句通常用executeQuery,会返回一个ResultSet结果集对象（这是一个二维表）
 			String sql="select Doc_dept ,SUM(Doc_patnum) as Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num "
 					   +" from  Doctor join Pat_charge on Doc_id=Pat_docid "
 					   +" where Pat_charged=1 and Doc_dept='"+input.getText()+"' "
 					   +" GROUP BY Doc_dept ";
-			ResultSet rs=null;
-			try {
-				rs=st.executeQuery(sql);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
+			
+		try {
+			rs=ps.executeQuery(sql);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
 				while(rs.next()){	
 					output.append("  科室名称："+rs.getString("Doc_dept"));
 					output.append("\n");
@@ -419,18 +298,17 @@ public void search_prodeptcount(){
 					output.append("\n");
 					output.append("  总金额："+rs.getDouble("Pro_num"));	
 					output.append("\n");
-				}
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}				
-			try {
-				rs.close();
-				st.close();
-				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}					
-		}	
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}finally{
+		DBManager.close(rs,ps,conn);
+	}
+  }
 }
+			
+			
+			

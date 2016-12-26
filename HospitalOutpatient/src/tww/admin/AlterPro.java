@@ -54,9 +54,9 @@ public class AlterPro {
 		altProFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		altProFrame.getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("\u8BF7\u8F93\u5165\u9700\u8981\u4FEE\u6539\u7684\u6536\u8D39\u9879\u76EE\u540D\u79F0\uFF1A");
+		JLabel lblNewLabel = new JLabel("\u8BF7\u8F93\u5165\u9700\u8981\u4FEE\u6539\u7684\u6536\u8D39\u9879\u76EE\u540D\u79F0\u6216\u7B80\u7801\uFF1A");
 		lblNewLabel.setFont(new Font("ËÎÌו", Font.PLAIN, 12));
-		lblNewLabel.setBounds(120, 74, 189, 22);
+		lblNewLabel.setBounds(114, 73, 227, 22);
 		altProFrame.getContentPane().add(lblNewLabel);
 		
 		textField = new JTextField();
@@ -71,11 +71,12 @@ public class AlterPro {
 				Connection conn=null;
 				PreparedStatement ps=null;
 				ResultSet rs=null;
-				String sql="select * from Charge_list where Pro_name=?";
+				String sql="select * from Charge_list where Pro_name=? or cast(Pro_bfcode as varchar(50))=?;";
 				try {
 					conn=DBManager.getConnect();
 					ps=conn.prepareStatement(sql);
 					ps.setString(1,proName);
+					ps.setString(2,proName);
 					rs=ps.executeQuery();
 					if(rs.next()){
 						UpdatePro.updatePro(rs.getString(1),rs.getFloat(2),rs.getString(3));

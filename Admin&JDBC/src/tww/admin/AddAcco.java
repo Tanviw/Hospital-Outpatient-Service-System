@@ -26,6 +26,7 @@ public class AddAcco {
 	private JTextField accoText;
 	private JPasswordField pwdText;
 	private JTextField deptText;
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
@@ -77,21 +78,31 @@ public class AddAcco {
 		
 		JLabel label_2 = new JLabel("\u5BC6\u7801\uFF1A");
 		label_2.setFont(new Font("宋体", Font.PLAIN, 13));
-		label_2.setBounds(90, 120, 39, 15);
+		label_2.setBounds(90, 114, 39, 15);
 		accoFrame.getContentPane().add(label_2);
 		
 		pwdText = new JPasswordField();
-		pwdText.setBounds(140, 120, 154, 21);
+		pwdText.setBounds(140, 111, 154, 21);
 		accoFrame.getContentPane().add(pwdText);
 		pwdText.setColumns(10);
 		
+		JLabel label_4 = new JLabel("\u786E\u8BA4\u5BC6\u7801\uFF1A");
+		label_4.setFont(new Font("宋体", Font.PLAIN, 13));
+		label_4.setBounds(64, 145, 65, 15);
+		accoFrame.getContentPane().add(label_4);
+		
+		passwordField = new JPasswordField();
+		passwordField.setColumns(10);
+		passwordField.setBounds(140, 142, 154, 21);
+		accoFrame.getContentPane().add(passwordField);
+		
 		JLabel label_3 = new JLabel("\u90E8\u95E8\uFF1A");
 		label_3.setFont(new Font("宋体", Font.PLAIN, 13));
-		label_3.setBounds(90, 160, 39, 15);
+		label_3.setBounds(90, 183, 39, 15);
 		accoFrame.getContentPane().add(label_3);
 		
 		deptText = new JTextField();
-		deptText.setBounds(140, 160, 154, 21);
+		deptText.setBounds(140, 180, 154, 21);
 		accoFrame.getContentPane().add(deptText);
 		deptText.setColumns(10);
 		
@@ -101,29 +112,38 @@ public class AddAcco {
 				int acco=Integer.parseInt(accoText.getText());
 				char[] pswd=pwdText.getPassword();
 				String pwd=String.valueOf(pswd);
+				char[] pswd2=passwordField.getPassword();
+				String pwd2=String.valueOf(pswd2);
 				String dept=deptText.getText();
-				Connection conn=null;
-				PreparedStatement ps=null;
-				String sql="insert into Account values(?,?,?)";
-				try {
-					conn=DBManager.getConnect();
-					ps=conn.prepareStatement(sql);
-					ps.setInt(1,acco);
-					ps.setString(2, pwd);
-					ps.setString(3, dept);
-					int i=ps.executeUpdate();
-					if(i==0){
-						JOptionPane.showMessageDialog(null, "添加账号失败！请检查您的输入信息是否正确。");
-					}else{
-						JOptionPane.showMessageDialog(null, "已成功添加账号！");
+				if(pwd.equals(pwd2)){
+					
+					Connection conn=null;
+					PreparedStatement ps=null;
+					String sql="insert into Account values(?,?,?)";
+					try {
+						conn=DBManager.getConnect();
+						ps=conn.prepareStatement(sql);
+						ps.setInt(1,acco);
+						ps.setString(2, pwd);
+						ps.setString(3, dept);
+						int i=ps.executeUpdate();
+						if(i==0){
+							JOptionPane.showMessageDialog(null, "添加账号失败！请检查您的输入信息是否正确。");
+						}else{
+							JOptionPane.showMessageDialog(null, "已成功添加账号！");
+						}
+						
+						accoFrame.setVisible(false);
+						
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}finally{
+						DBManager.close(ps,conn);
 					}
-					
-					accoFrame.setVisible(false);
-					
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}finally{
-					DBManager.close(ps,conn);
+				}else{
+					JOptionPane.showMessageDialog(null, "两次密码输入不一致！请重新输入！");
+					pwdText.setText("");
+					passwordField.setText("");
 				}
 			}
 		});
@@ -138,5 +158,9 @@ public class AddAcco {
 		});
 		cancButton.setBounds(238, 229, 70, 30);
 		accoFrame.getContentPane().add(cancButton);
+		
+	
+		
+		
 	}
 }

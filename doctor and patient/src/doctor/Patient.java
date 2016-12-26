@@ -1,4 +1,4 @@
-package pat;
+package doctor;
 
 import java.awt.*;
 import java.awt.FlowLayout;

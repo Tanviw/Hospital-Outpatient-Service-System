@@ -4,10 +4,10 @@ import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 
-import cn.edu.usst.yff.Director;
 import tww.admin.Admin;
 import tww.pool.DBManager;
 import wyqoctor.DoctorVisit;
+import yff.Director;
 
 public class Login {
 	private static JTextField account;

@@ -47,7 +47,7 @@ public class RollScreen extends  JFrame  implements ActionListener  {
 	    b1.addActionListener(screen);
 	    b2.addActionListener(screen);
 	    
-	    frm.setBounds(800,500,800,500);
+	    frm.setBounds(400,150,800,500);
 	    frm.setVisible(true);	  
 	}
 	@Override

@@ -56,7 +56,7 @@ public class Director extends  JFrame  implements ActionListener{
 	    bottomPanel.add(output);
 	    bottomPanel.setVisible(true);
 	    frm.getContentPane().add(output);	
-	    frm.setBounds(800,500,800,500);
+	    frm.setBounds(400,150,800,500);
 	    frm.setVisible(true);	    
 	    }
 	@Override

@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
-
 import tww.pool.DBManager;
 
 public class RollScreen extends  JFrame  implements ActionListener  {
@@ -56,7 +55,6 @@ public class RollScreen extends  JFrame  implements ActionListener  {
 		if(e.getSource().equals(b1)){
 			output.setText(null);
 			output.setText("查询的科室是："+(String) box.getSelectedItem()+"\n");
-			output.append("当前的排队号码有：\n");
 			rollscreen();			
 		}
 		if(e.getSource().equals(b2)){
@@ -70,18 +68,18 @@ public static void rollscreen(){
 	try {
 		conn=DBManager.getConnect();
 		ps=conn.createStatement();
-		String sql="select Pat_num,Doc_dept from Doctor join Patient_queue on Doctor.Doc_id=Patient_queue.Doc_id "
+		String sql="select Doctor.Doc_id,Pat_num,Doc_dept from Doctor join Patient_queue on Doctor.Doc_id=Patient_queue.Doc_id "
 	               +"where cast(Doc_dept as varchar(8000))='"+(String)box.getSelectedItem()+"'"
-	                +"ORDER BY Pat_num ASC";   
+	                +"ORDER BY Pat_num ASC ,Doc_id";   
 		try {
-			rs=ps.executeQuery(sql);
-			
+			rs=ps.executeQuery(sql);			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		try {
-			while(rs.next()){				
-					output.append("  "+rs.getInt("Pat_num"));
+			while(rs.next()){	
+				    output.append("医生id："+rs.getInt("Doc_id"));
+					output.append("    排队号："+rs.getInt("Pat_num"));
 					output.append("\n");				
 			}
 		} catch (SQLException e1) {

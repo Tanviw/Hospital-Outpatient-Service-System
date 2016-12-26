@@ -51,7 +51,7 @@ public class Director extends  JFrame  implements ActionListener{
 	    output.setRows(60);
 	    output.setColumns(50);
 	    output.setEditable(false);
-	    output.setText("请选择要查询的按钮......\n搜索信息请输入医生id或药品名称或科室名称......\n等待结果显示......"); 
+	    output.setText("请选择要查询的按钮......\n搜索信息请输入医生id或药品名称或药品简码或科室名称......\n等待结果显示......"); 
 	    output.setLineWrap(true);
 	    bottomPanel.add(output);
 	    bottomPanel.setVisible(true);
@@ -59,12 +59,14 @@ public class Director extends  JFrame  implements ActionListener{
 	    frm.setBounds(400,150,800,500);
 	    frm.setVisible(true);	    
 	    }
+	@SuppressWarnings("unused")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(b1)){
 			output.setText(null);
 			if(box.getSelectedItem().equals(likes[0])){
+				
 				Search_Med();
 			 }
             if(box.getSelectedItem().equals(likes[1])){
@@ -76,18 +78,31 @@ public class Director extends  JFrame  implements ActionListener{
 	            Search_Doc();	
              }		
             if(box.getSelectedItem().equals(likes[3])){            	
-					output.setText(null);
-	            search_promed();	        		          	
+					if(!input.getText().equals("")){
+						output.setText(null);
+	                    search_promed();
+					}	
+					else {
+						output.append("请输入药品名称或简码...");
+						}
             }
             if(box.getSelectedItem().equals(likes[4])){
-            	
+            	if(!input.getText().equals("")){
 					output.setText(null);
-	            search_prodeptcount();	        		            	
+                    search_prodeptcount();	
+				}	
+				else {
+					output.append("请输入科室名称...");
+					}						                    		            	
              }
             if(box.getSelectedItem().equals(likes[5])){
-            	
+            	if(!input.getText().equals("")){
 					output.setText(null);
-            	search_prodoc();	
+                    search_prodoc();	
+				}	
+				else {
+					output.append("请输入医生id...");
+					}					            	
         		}            	
 		}       											
 		if(e.getSource().equals(b2)){
@@ -110,10 +125,10 @@ public class Director extends  JFrame  implements ActionListener{
 				e.printStackTrace();
 			}
 			try {
-				while(rs.next()){
-				output.append("    名称："+rs.getString("Med_name"));	
-				output.append("    简码："+rs.getString("Med_bfcode"));		
-				output.append("    库存量："+rs.getInt("Med_count"));	
+				while(rs.next()){									   
+				output.append("名称 :"+rs.getString("Med_name"));	
+				output.append("     简码 :"+rs.getString("Med_bfcode"));		
+				output.append("     库存量:"+rs.getInt("Med_count"));	
 				output.append("\n");
 				}
 			} catch (SQLException e1) {
@@ -125,7 +140,7 @@ public class Director extends  JFrame  implements ActionListener{
 		}finally{
 			DBManager.close(rs,ps,conn);
 		}
-	}					   																
+	}					   																	
 	//查询科室的挂号量和总金额
 	public void Search_Deptcount(){
 		
@@ -207,10 +222,11 @@ public class Director extends  JFrame  implements ActionListener{
 		try {
 			conn=DBManager.getConnect();
 			ps=conn.createStatement();
-			String sql="select * from medicine where Med_name='"+input.getText()+"'";
+			String sql="select * from medicine where Med_name='"+input.getText()+"' "
+					+ "or cast (Med_bfcode as varchar(100))='"+input.getText()+"'";
 			try {
 				rs=ps.executeQuery(sql);
-				
+				input.setText(null);				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -238,6 +254,7 @@ public class Director extends  JFrame  implements ActionListener{
 		Connection conn=null;
 		Statement ps=null;
 		ResultSet rs=null;
+		
 		try {
 			conn=DBManager.getConnect();
 			ps=conn.createStatement();
@@ -247,7 +264,7 @@ public class Director extends  JFrame  implements ActionListener{
          +" Group By Doc_patnum,Doc_id";
 			try {
 				rs=ps.executeQuery(sql);
-				
+				input.setText(null);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -282,10 +299,10 @@ public void search_prodeptcount(){
 			String sql="select Doc_dept ,SUM(Doc_patnum) as Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num "
 					   +" from  Doctor join Pat_charge on Doc_id=Pat_docid "
 					   +" where Pat_charged=1 and Doc_dept='"+input.getText()+"' "
-					   +" GROUP BY Doc_dept ";
-			
+					   +" GROUP BY Doc_dept ";			
 		try {
 			rs=ps.executeQuery(sql);
+			input.setText(null);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

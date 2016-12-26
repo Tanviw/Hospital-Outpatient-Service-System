@@ -11,7 +11,7 @@ import yff.Director;
 
 public class Login {
 	private static JTextField account;
-	private static String [] opt={"","Ò©Ê¦","¹ÒºÅÊÕ·Ñ","Ò½Éú","¹ÜÀíÔ±","Ôº³¤"};
+	private static String [] opt={"","è¯å¸ˆ","æŒ‚å·æ”¶è´¹","åŒ»ç”Ÿ","ç®¡ç†å‘˜","é™¢é•¿"};
 	private static JComboBox<String> dept;
 	
 	private static Connection conn=DBManager.getConnect();
@@ -82,7 +82,7 @@ public class Login {
 		char [] p=pwd.getPassword();
 		String pass=new String(p);
 		if(account.getText().length()==0||pass.equals("")||dept.getSelectedItem().equals(""))
-			JOptionPane.showMessageDialog(null, "Çë½«µÇÂ¼ĞÅÏ¢ÌîĞ´ÍêÕû£¡","ĞÅÏ¢ÒÅÂ©",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "è¯·å°†ç™»å½•ä¿¡æ¯å¡«å†™å®Œæ•´ï¼","ä¿¡æ¯é—æ¼",JOptionPane.ERROR_MESSAGE);
 		else{
 			String sql;
 			int index=dept.getSelectedIndex();
@@ -102,22 +102,24 @@ public class Login {
 					            frm.dispose();
 					            break;
 					    case 3: DoctorVisit.main(null);
-					           DBManager.close(rs,st,conn);
-					           frm.dispose();
-			                   break; 
+
+					            DBManager.close(rs,st,conn);
+					            frm.dispose();
+			                    break; 
 					    case 4: Admin.main(null);
-					           DBManager.close(rs,st,conn);	
-					           frm.dispose();
-                               break;
+					            DBManager.close(rs,st,conn);
+					            frm.dispose();
+                                break;
 					    case 5: Director.main(null);
-							    DBManager.close(rs,st,conn);
-							    frm.dispose();
-                               break;
+					            DBManager.close(rs,st,conn);
+					            frm.dispose();
+                                break;
+
 					    default:break;
 					}
 				}
 				else{  
-					JOptionPane.showMessageDialog(null, "ÕËºÅ¡¢ÃÜÂë¼°²¿ÃÅ²»Æ¥Åä£¬Çë¼ì²éÄúµÄÊäÈë£¡","µÇÂ¼Ê§°Ü",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "è´¦å·ã€å¯†ç åŠéƒ¨é—¨ä¸åŒ¹é…ï¼Œè¯·æ£€æŸ¥æ‚¨çš„è¾“å…¥ï¼","ç™»å½•å¤±è´¥",JOptionPane.ERROR_MESSAGE);
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

@@ -82,7 +82,7 @@ public class Pharmacy {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
-			sql="select Pat_feeName from Pat_charge where Pat_phone='"+pat_phone+"' and Pat_charged=0";
+			sql="select Pat_feeName from Pat_charge where Pat_phone ='"+pat_phone+"' and Pat_charged=0";
 			try {
 				rs=st.executeQuery(sql);
 			} catch (SQLException e1) {
@@ -91,12 +91,12 @@ public class Pharmacy {
 			}
 			try {  //输出该病人的所取的药品信息
 				if(!rs.next()){
-					sql="select Pat_feename,Pro_num from Pat_charge,Medicine where Pat_feename=Med_name and Pat_phone='"+pat_phone+"'";
+					sql="select Pat_feename,Pro_num from Pat_charge,Medicine where cast(Pat_feename as varchar(100))=Med_name and Pat_phone='"+pat_phone+"'";
 					rs=st.executeQuery(sql);
 					if(rs.next()){
 						medicine.setText("该病人的药品信息：");
 						do{
-							medicine.append("\n药品："+rs.getString("Pat_feename")+"  数量："+rs.getInt("Pro_num"));
+							medicine.append("\n\n药品："+rs.getString("Pat_feename")+"  数量："+rs.getInt("Pro_num"));
 						}while(rs.next());
 						medicine.append("\n请取好您的药品！");
 					}

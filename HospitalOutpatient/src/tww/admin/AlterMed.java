@@ -84,7 +84,7 @@ public class AlterMed {
 					if(rs.next()){
 						UpdateMed.updateMed(rs.getString(1),rs.getFloat(2),rs.getString(3),rs.getInt(4));
 					}else{
-						JOptionPane.showMessageDialog(null, "该药品不存在！请检查您的输入信息是否正确。");
+						JOptionPane.showMessageDialog(null, "该药品不存在！请检查您的输入信息是否正确!");
 					}
 						
 					alterMedFrame.setVisible(false);

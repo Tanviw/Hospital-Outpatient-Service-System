@@ -169,8 +169,9 @@ public class Registration {
 	
 	public void jdgOrder(){ //判断该病人是否预约
 		String p_Num=phone_search.getText().toString();
-		if(!p_Num.matches("\\d+"))
+		if(!p_Num.matches("\\d+")){
 			JOptionPane.showMessageDialog(null, "请输入正确的电话号码！","输入错误",JOptionPane.ERROR_MESSAGE);
+		}
 		else{
 			String sql;
 			sql="select * from Pat_order where cast(Pat_phone as varchar(100))='"+p_Num+"'";
@@ -187,6 +188,7 @@ public class Registration {
 					phone.setText(rs.getString("Pat_phone"));
 					orderTime.setText(rs.getString("Order_time"));		
 				}
+				phone_search.setText("");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -195,8 +197,8 @@ public class Registration {
 	}
 	
 	public void handout(){ 
-		if(name.getText().length()==0||sex.getText().length()==0||phone.getText().length()==0||dept.getText().length()==0||pat_id.getText().length()==0||doctor.getText().length()==0){
-			JOptionPane.showMessageDialog(null, "请将病人信息补充完整！","信息遗漏",JOptionPane.ERROR_MESSAGE);
+		if(name.getText().length()==0||sex.getText().length()==0||phone.getText().length()==0||dept.getText().length()==0||pat_id.getText().length()==0||doctor.getText().length()==0||!age.getText().matches("\\d+")){
+			JOptionPane.showMessageDialog(null, "病人信息没有填写完整或病人信息格式错误！","信息遗漏",JOptionPane.ERROR_MESSAGE);
 		}
 		else{
 			String sql1,sql2,sql3,sql4;
@@ -225,7 +227,7 @@ public class Registration {
 			sex.setText("");
 			phone.setText("");
 			dept.setText("");
-			orderTime.setText("");
+			orderTime.setText("无");
 			pat_id.setText("");
 			doctor.setText("");
 			doc_id.setText("");
@@ -234,8 +236,8 @@ public class Registration {
 	}
 	
 	public void getID(){
-		if(name.getText().length()==0||sex.getText().length()==0||phone.getText().length()==0||dept.getText().length()==0){
-			JOptionPane.showMessageDialog(null, "请将病人信息填写完整！","信息遗漏",JOptionPane.ERROR_MESSAGE);
+		if(name.getText().length()==0||sex.getText().length()==0||!phone.getText().matches("\\d+")||dept.getText().length()==0||!age.getText().matches("\\d+")){
+			JOptionPane.showMessageDialog(null, "病人信息没有填写完整或病人信息格式错误！","信息遗漏",JOptionPane.ERROR_MESSAGE);
 		}
 		else{
 			String order=orderTime.getText().toString();

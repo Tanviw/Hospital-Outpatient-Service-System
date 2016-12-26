@@ -11,7 +11,7 @@ import yff.Director;
 
 public class Login {
 	private static JTextField account;
-	private static String [] opt={"","药房","挂号收费","医生","管理员","院长"};
+	private static String [] opt={"","药师","挂号收费","医生","管理员","院长"};
 	private static JComboBox<String> dept;
 	
 	private static Connection conn=DBManager.getConnect();
@@ -102,14 +102,17 @@ public class Login {
 					            frm.dispose();
 					            break;
 					    case 3: DoctorVisit.main(null);
-					              DBManager.close(rs,st,conn);
+					           DBManager.close(rs,st,conn);
+					           frm.dispose();
 			                   break; 
 					    case 4: Admin.main(null);
-					           DBManager.close(rs,st,conn);						
-                                             break;
+					           DBManager.close(rs,st,conn);	
+					           frm.dispose();
+                               break;
 					    case 5: Director.main(null);
-					    DBManager.close(rs,st,conn);					
-                                                  break;
+							    DBManager.close(rs,st,conn);
+							    frm.dispose();
+                               break;
 					    default:break;
 					}
 				}

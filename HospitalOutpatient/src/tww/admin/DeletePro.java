@@ -73,11 +73,12 @@ public class DeletePro {
 				Connection conn=null;
 				PreparedStatement ps=null;
 				ResultSet rs=null;
-				String sql="select * from Charge_list where Pro_name=?";
+				String sql="select * from Charge_list where Pro_name=? or cast(Pro_bfcode as varchar(50))=?;";
 				try {
 					conn=DBManager.getConnect();
 					ps=conn.prepareStatement(sql);
 					ps.setString(1,proName);
+					ps.setString(2,proName);
 					rs=ps.executeQuery();
 					if(rs.next()){
 						DropPro.dropPro(rs.getString(1),rs.getFloat(2),rs.getString(3));

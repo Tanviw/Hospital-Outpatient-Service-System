@@ -112,7 +112,7 @@ public class UpdateMed {
 		
 				Connection conn=null;
 				PreparedStatement ps=null;
-				String sql="update Medicine set Med_name=?,Med_price=?,Med_bfcode=?,Med_count=? where  Med_name=? or cast(Med_bfcode as varchar(50))=?;";
+				String sql="update Medicine set Med_name=?,Med_price=?,Med_bfcode=?,Med_count=? where  Med_name=?;";
 				try {
 					conn=DBManager.getConnect();
 					ps=conn.prepareStatement(sql);
@@ -121,7 +121,7 @@ public class UpdateMed {
 					ps.setString(3, jm);
 					ps.setInt(4, msl);
 					ps.setString(5, medName);
-					ps.setString(6, medName);
+		
 					int i=ps.executeUpdate();
 					if(i==0){
 						JOptionPane.showMessageDialog(null, "修改药品信息失败！请检查您的输入信息是否正确。");

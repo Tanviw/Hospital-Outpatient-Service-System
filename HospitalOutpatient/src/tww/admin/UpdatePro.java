@@ -99,7 +99,7 @@ public class UpdatePro {
 		
 				Connection conn=null;
 				PreparedStatement ps=null;
-				String sql="update Charge_list set Pro_name=? ,Pro_price=?,Pro_bfcode=? where Pro_name=? or cast(Pro_bfcode as varchar(50))=?;";
+				String sql="update Charge_list set Pro_name=? ,Pro_price=?,Pro_bfcode=? where Pro_name=?;";
 				try {
 					conn=DBManager.getConnect();
 					ps=conn.prepareStatement(sql);
@@ -107,7 +107,7 @@ public class UpdatePro {
 					ps.setFloat(2, price);
 					ps.setString(3, jm);
 					ps.setString(4, mc);
-					ps.setString(5, mc);
+		
 					int i=ps.executeUpdate();
 					if(i==0){
 						JOptionPane.showMessageDialog(null, "修改收费项目失败！请检查您的输入信息是否正确。");

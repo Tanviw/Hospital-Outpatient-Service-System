@@ -60,12 +60,12 @@ public class DropPro {
 			public void actionPerformed(ActionEvent e) {
 				Connection conn=null;
 				PreparedStatement ps=null;
-				String sql="delete from Charge_list where Pro_name=? or cast(Pro_bfcode as varchar(50))=?;";
+				String sql="delete from Charge_list where Pro_name=?;";
 				try {
 					conn=DBManager.getConnect();
 					ps=conn.prepareStatement(sql);
 					ps.setString(1,name);
-					ps.setString(2,name);
+		
 					int i=ps.executeUpdate();
 					if(i==0){
 						JOptionPane.showMessageDialog(null, "删除收费项目失败！请检查您的输入信息是否正确。");

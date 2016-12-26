@@ -56,9 +56,9 @@ public class DeleteMed {
 		delMedFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		delMedFrame.getContentPane().setLayout(null);
 		
-		JLabel label = new JLabel("\u8BF7\u8F93\u5165\u9700\u8981\u5220\u9664\u7684\u836F\u54C1\u540D\u79F0\u6216\u7B80\u7801\uFF1A");
+		JLabel label = new JLabel("\u8BF7\u8F93\u5165\u9700\u8981\u5220\u9664\u7684\u836F\u54C1\u540D\u79F0\uFF1A");
 		label.setFont(new Font("ËÎÌו", Font.PLAIN, 12));
-		label.setBounds(123, 78, 209, 22);
+		label.setBounds(131, 76, 189, 22);
 		delMedFrame.getContentPane().add(label);
 		
 		textField = new JTextField();
@@ -73,12 +73,11 @@ public class DeleteMed {
 				Connection conn=null;
 				PreparedStatement ps=null;
 				ResultSet rs=null;
-				String sql="select * from Medicine where Med_name=? or cast(Med_bfcode as varchar(50))=?;";
+				String sql="select * from Medicine where Med_name=?";
 				try {
 					conn=DBManager.getConnect();
 					ps=conn.prepareStatement(sql);
 					ps.setString(1,medName);
-					ps.setString(2,medName);
 					rs=ps.executeQuery();
 					if(rs.next()){
 						DropMed.dropMed(rs.getString(1),rs.getFloat(2),rs.getString(3),rs.getInt(4));

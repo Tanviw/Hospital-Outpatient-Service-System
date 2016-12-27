@@ -1,18 +1,20 @@
 package yff;
 
-import java.sql.*;
-import javax.swing.*;
-import tww.pool.DBManager;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.*;
 
-public class Director extends  JFrame  implements ActionListener{
+import javax.swing.*;
+import tww.pool.DBManager;
+
+public class Director extends  JFrame  implements ActionListener{	
 	static Director director=new Director();	
 	static String[] likes={"查询各药品的库存量","查询各科室的挂号量和总金额","查询各医生的挂号量和总金额","查询某药品的库存量","查询某科室的挂号量和总金额","查询某医生的挂号量和总金额"};
 	static JPanel topPanel,bottomPanel;	
 	static JTextField input;
 	static JButton b1,b2;
 	static JTextArea output;
+	@SuppressWarnings("rawtypes")
 	static JComboBox box;
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
@@ -258,10 +260,11 @@ public class Director extends  JFrame  implements ActionListener{
 		try {
 			conn=DBManager.getConnect();
 			ps=conn.createStatement();
-			String sql="select Doc_id,SUM(Doc_patnum ) as Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num " 
+			String sql="select Doc_id, Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num " 
          +" from Pat_charge join Doctor on Doc_id=Pat_docid "
          +" where  Pat_charged=1 and Doc_id="+input.getText()+" "
          +" Group By Doc_patnum,Doc_id";
+			
 			try {
 				rs=ps.executeQuery(sql);
 				input.setText(null);
@@ -276,56 +279,71 @@ public class Director extends  JFrame  implements ActionListener{
 					output.append("\n");
 					output.append(" 总金额："+rs.getDouble("Pro_num"));
 					output.append("\n");
-				}
+				}																															
 			} catch (SQLException e1) {
 				e1.printStackTrace();
-			}
-
+			}							
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
 			DBManager.close(rs,ps,conn);
-		}
+		}														
 	}												
 public void search_prodeptcount(){
 		
 	Connection conn=null;
 	Statement ps=null;
-	ResultSet rs=null;
+	ResultSet rs1=null;
+	ResultSet rs2=null;
 	try {
 		conn=DBManager.getConnect();
 		ps=conn.createStatement();
 		//查询检索数据；select语句通常用executeQuery,会返回一个ResultSet结果集对象（这是一个二维表）
-			String sql="select Doc_dept ,SUM(Doc_patnum) as Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num "
+			/*String sql="select Doc_dept ,SUM(Doc_patnum) as Doc_patnum,SUM(Pat_proprice*Pro_num) as Pro_num "
 					   +" from  Doctor join Pat_charge on Doc_id=Pat_docid "
 					   +" where Pat_charged=1 and Doc_dept='"+input.getText()+"' "
-					   +" GROUP BY Doc_dept ";			
-		try {
-			rs=ps.executeQuery(sql);
-			input.setText(null);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
-				while(rs.next()){	
-					output.append("  科室名称："+rs.getString("Doc_dept"));
+					   +" GROUP BY Doc_dept ";	
+					   */
+		String sql1="select Doc_dept ,SUM(Doc_patnum) as Doc_patnum"
+	+" from  Doctor  where  Doc_dept='"+input.getText()+"' GROUP BY Doc_dept ";
+		String sql2="select SUM(Pat_proprice*Pro_num) as Pro_num " 
+  +" from  Doctor join Pat_charge  on Doc_id=Pat_docid "    
+  +" where Pat_charged=1 and Doc_dept='"+input.getText()+"' "
+  +" GROUP BY Doc_dept ";   													
+					try {
+						rs1=ps.executeQuery(sql1);
+						input.setText(null);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					try {
+						while(rs1.next()){						
+							output.append("  科室名称："+rs1.getString("Doc_dept"));
 					output.append("\n");
-					output.append("  总挂号量："+rs.getInt("Doc_patnum"));
+					output.append("  总挂号量："+rs1.getInt("Doc_patnum"));
 					output.append("\n");
-					output.append("  总金额："+rs.getDouble("Pro_num"));	
-					output.append("\n");
+						}																															
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}																																																																													
+				try {
+					rs2=ps.executeQuery(sql2);
+					input.setText(null);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				try {
+					while(rs2.next()){																	
+				output.append("  总金额："+rs2.getDouble("Pro_num"));	
+				output.append("\n");	
+					}																															
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}							
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally{
+				DBManager.close(rs2,ps,conn);
 			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-	} catch (Exception e) {
-		e.printStackTrace();
-	}finally{
-		DBManager.close(rs,ps,conn);
-	}
-  }
+	}	
 }
-			
-			
-			

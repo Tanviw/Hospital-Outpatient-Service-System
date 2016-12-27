@@ -98,7 +98,7 @@ public class Pharmacy {
 						do{
 							medicine.append("\n\n药品："+rs.getString("Pat_feename")+"  数量："+rs.getInt("Pro_num"));
 						}while(rs.next());
-						medicine.append("\n请取好您的药品！");
+						medicine.append("\n\n请取好您的药品！");
 					}
 					else medicine.setText("该病人不需取药或无该病人记录！");
 				}

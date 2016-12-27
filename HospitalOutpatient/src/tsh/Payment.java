@@ -70,6 +70,8 @@ public class Payment {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
+				project.setText("");
+				total=0;
 				if(!phone.getText().matches("\\d+"))
 					JOptionPane.showMessageDialog(null, "请输入正确的电话号码！","输入错误",JOptionPane.ERROR_MESSAGE);
 				else{

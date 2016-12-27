@@ -6,7 +6,7 @@ import javax.swing.*;
 
 import tww.admin.Admin;
 import tww.pool.DBManager;
-import wyqoctor.DoctorVisit;
+import wyq.*;
 import yff.Director;
 
 public class Login {

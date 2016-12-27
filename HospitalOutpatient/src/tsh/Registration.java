@@ -286,19 +286,22 @@ public class Registration {
 						       + "where cast(Doc_dept as varchar(50))='"+dept.getText().toString()+"' and Doctor.Doc_id=Patient_queue.Doc_id "
 						       + "group by Doctor.Doc_id ) as B)";
 					rs=st.executeQuery(sql);
-					rs.next();
-					doc_id.setText(Integer.toString(rs.getInt("docid")));
-					sql="select Doc_name from Doctor where Doc_id="+Integer.parseInt(doc_id.getText().toString());
-					rs=st.executeQuery(sql);
-					rs.next();
-					doctor.setText(rs.getString("Doc_name"));
+					if(rs.next()){
+						doc_id.setText(Integer.toString(rs.getInt("docid")));
+					    sql="select Doc_name from Doctor where Doc_id="+Integer.parseInt(doc_id.getText().toString());
+					    rs=st.executeQuery(sql);
+					    rs.next();
+					    doctor.setText(rs.getString("Doc_name"));
+					}
+					else
+						JOptionPane.showMessageDialog(null, "科室名错误！","信息错误！",JOptionPane.ERROR_MESSAGE);
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			if(pat_id.getText().length()==0&&(order.equals("无")||dif>1||dif<-1)){
+			if(pat_id.getText().length()==0&&(order.equals("无")||dif>1||dif<-1)&&doc_id.getText().length()!=0){
 				sql="select MAX(Pat_num) as id from Patient_Queue where Doc_id="+Integer.parseInt(doc_id.getText().toString());
 				try {
 					st=conn.createStatement();
@@ -308,10 +311,9 @@ public class Registration {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				
+				}	
 			}
-			if(pat_id.getText().length()==0&&(dif<1&&dif>-1)){
+			if(pat_id.getText().length()==0&&(dif<1&&dif>-1)&&doc_id.getText().length()!=0){
 				sql="select MIN(Pat_num) as id from Patient_Queue where Doc_id="+Integer.parseInt(doc_id.getText().toString());
 				try {
 					st=conn.createStatement();
